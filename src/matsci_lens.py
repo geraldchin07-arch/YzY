@@ -160,6 +160,10 @@ def load_crystallization_dataset(url: str = DATA_URL) -> tuple[pd.DataFrame, pd.
 
 def build_model(model_name: str, random_state: int = 42) -> Any:
     """Build a supported regressor; baseline is calculated separately."""
+    if model_name == "Transformer Neural Network":
+        # Import lazily so classical models remain independent of PyTorch startup.
+        from .transformer_model import CompositionTransformerRegressor
+        return CompositionTransformerRegressor(random_state=random_state)
     if model_name == "Median Baseline":
         return None
     if model_name == "Ridge Regression":
