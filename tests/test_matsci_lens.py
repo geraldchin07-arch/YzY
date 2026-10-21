@@ -34,6 +34,18 @@ class CrystalCastTests(unittest.TestCase):
         features = composition_features(self.raw_x)
         self.assertEqual(set(features.columns), {"Fe", "B", "Si"})
 
+    def test_composition_features_excludes_temperature_shorthand(self):
+        raw = pd.DataFrame({
+            "Fe (at.%)": [70.0] * 12,
+            "B (at.%)": [20.0] * 12,
+            "Tx [K]": [750.0] * 12,
+            "Tg [K]": [680.0] * 12,
+            "Tl [K]": [1200.0] * 12,
+            "Tm [K]": [1100.0] * 12,
+        })
+        features = composition_features(raw)
+        self.assertEqual(set(features.columns), {"Fe", "B"})
+
     def test_prepare_dataset_uses_composition_only(self):
         raw = self.raw_x.copy()
         raw["Tx [K]"] = self.y
