@@ -1,31 +1,22 @@
-# Two-person team plan
+# CrystalCast — two-person team plan
 
-Deadline: 22 October 2026, 7:00 PM CDT (23 October, 8:00 AM Singapore time).
+Deadline listed on the form: 22 October 2026, 7:00 PM CDT (23 October, 8:00 AM Singapore time).
 
 ## Teammate A — Data and modelling
-- Verify the UCI dataset loads.
-- Review data cleaning and target selection.
-- Run Median Baseline, Ridge Regression, and Extra Trees.
-- Record MAE, RMSE, R², test fraction, random seed, and sample counts.
-- Note limitations; do not claim causality or experimental discovery.
+- Run the setup and offline tests.
+- Load the RWTH spreadsheet; verify target column, composition columns, and usable row count.
+- Evaluate Median Baseline, Ridge Regression, and Extra Trees with the same split and seed.
+- Record the actual metrics and examine obvious prediction errors.
+- Check for target leakage and document limitations.
 
 ## Teammate B — Interface and submission
-- Launch the Marimo app and check each UI control.
-- Review charts and error analysis.
-- Test setup from a fresh environment and improve README if needed.
-- Prepare a demo under four minutes, supporting screenshots, social post, and one-page write-up.
+- Launch and test every Marimo control.
+- Test the composition input with elements represented by the loaded dataset.
+- Check plot labels, units, error summary, and failure messages.
+- Finish the README, one-page write-up, demo video, and public social post.
 
-## Integration protocol
-- Work on separate branches or separate files where possible.
-- Commit small, meaningful changes.
-- Open a pull request before merging.
-- Run `python -m unittest discover -s tests -v` after integration.
-- Both teammates should review metrics and write-up before submission.
-
-## Suggested order
-1. Confirm package installation and unit tests.
-2. Run app and fetch real data.
-3. Validate model metrics.
-4. Finish README and public repository.
-5. Capture the demo and write-up.
-6. Publish social post and submit.
+## Integration
+- One teammate owns data/model files while the other owns app/write-up files.
+- Coordinate before editing the same file and review all results together.
+- Run the full test command after merging changes.
+- Do not put unverified metrics or unsupported scientific claims into the submission.
