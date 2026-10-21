@@ -51,7 +51,7 @@ def _(X, mo, y):
     if X is not None and y is not None:
         model_choice = mo.ui.dropdown(
             options=["Median Baseline", "Ridge Regression", "Extra Trees", "Transformer Neural Network"],
-            value="Extra Trees", label="Model for evaluation and prediction"
+            value="Transformer Neural Network", label="Model for evaluation and prediction"
         )
         test_fraction = mo.ui.slider(start=0.1, stop=0.3, step=0.05, value=0.2, label="Held-out test fraction")
         seed = mo.ui.number(value=42, start=0, stop=10000, label="Random seed")
