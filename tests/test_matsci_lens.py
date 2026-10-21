@@ -61,9 +61,10 @@ class CrystalCastTests(unittest.TestCase):
         self.assertIsNone(build_model("Median Baseline"))
         self.assertIsNotNone(build_model("Ridge Regression"))
         self.assertIsNotNone(build_model("Extra Trees"))
+        self.assertIsNotNone(build_model("Transformer Neural Network"))
 
     def test_evaluation_finite_for_all_models(self):
-        for model in ["Median Baseline", "Ridge Regression", "Extra Trees"]:
+        for model in ["Median Baseline", "Ridge Regression", "Extra Trees", "Transformer Neural Network"]:
             result = evaluate_model(self.x, self.y, model, random_state=7)
             self.assertTrue(np.isfinite([result.mae, result.rmse, result.r2]).all())
             self.assertEqual(len(result.y_test), len(result.y_pred))
