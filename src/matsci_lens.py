@@ -121,7 +121,10 @@ def find_tx_column(raw: pd.DataFrame) -> Any:
     """Find the crystallization-onset temperature (Tx) target column."""
     for column in raw.columns:
         normalized = re.sub(r"[^a-z0-9]", "", str(column).lower())
-        if "crystall" in normalized and ("temp" in normalized or "tx" in normalized or normalized == "crystallization"):
+        if (
+            ("crystall" in normalized or "kristallisation" in normalized)
+            and ("temp" in normalized or "tx" in normalized or "temperatur" in normalized or normalized in {"crystallization", "crystallisation"})
+        ):
             return column
     for column in raw.columns:
         normalized = re.sub(r"[^a-z0-9]", "", str(column).lower())
@@ -138,6 +141,10 @@ def prepare_dataset(raw: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     target_column = find_tx_column(raw)
     features = composition_features(raw)
     target = pd.to_numeric(raw[target_column], errors="coerce")
+    # Normalize explicitly labelled Celsius targets to kelvin for consistent output.
+    label = str(target_column)
+    if re.search(r"(?:°\s*C\b|\bdeg(?:ree)?s?\s*C(?:elsius)?\b|\bCelsius\b|\[\s*C\s*\]|\(\s*C\s*\)|/\s*C\b)", label, flags=re.IGNORECASE):
+        target = target + 273.15
     x, y = clean_xy(features, target)
     x = x.dropna(axis=1, how="all")
     x.columns = [str(column) for column in x.columns]
