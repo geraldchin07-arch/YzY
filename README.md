@@ -15,7 +15,8 @@ Metallic glasses lack the long-range ordered structure of crystals. When heated,
 - Compares a median baseline, Ridge Regression, Extra Trees, and a small PyTorch TransformerEncoder model.
 - Treats each element as a token, with its concentration as the numeric value and a learned embedding identifying the element. Self-attention can model interactions between composition features.
 - Uses early stopping on a validation slice of the training data for the experimental Transformer.
-- Reports MAE, RMSE, and R² on a reproducible held-out test split.
+- Reports MAE, RMSE, and R² for all four models on the same reproducible held-out test split.
+- Normalizes targets explicitly labelled in °C to kelvin; unit assumptions must still be verified against the source workbook.
 - Plots measured versus predicted crystallization-onset temperature and summarizes prediction errors.
 - Accepts a compact composition such as Fe72B20Si8 for an exploratory prediction, if its elements are represented in the data.
 
@@ -65,7 +66,7 @@ The first dataset load needs internet access unless the workbook has been downlo
 
 ## Model evaluation
 
-Use the same test fraction and random seed when comparing models. The app reports:
+Use the same test fraction and random seed when comparing models. The app compares all models on the same held-out split and reports:
 
 - MAE: average absolute prediction error, in kelvin.
 - RMSE: error metric that penalizes larger errors more strongly, in kelvin.
@@ -78,6 +79,10 @@ Use the actual metrics displayed after loading the source dataset. A random spli
 - **Data and modelling:** verify the data columns and target, run tests, compare models, record true-data metrics, and write the limitations.
 - **Interface and communication:** test the Marimo app and composition-input flow, review charts, prepare the short demo, and finish the submission text.
 - Both teammates should inspect the results before submission. Commit changes in small increments and coordinate before editing the same file.
+
+## Research context
+
+The source publication reports an artificial neural network with RMSE of 12.8 K for crystallization temperature (Tx). This is useful context, but it is **not a direct head-to-head benchmark** unless the exact same rows, features, preprocessing, and evaluation split are reproduced. Our write-up should report our own measured results separately.
 
 ## Scientific cautions
 
