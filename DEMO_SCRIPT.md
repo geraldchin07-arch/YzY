@@ -1,10 +1,10 @@
-# Demo script (target: 2–3 minutes)
+# CrystalCast demo script (2–3 minutes)
 
-1. **Problem (15–20 s):** Material-property prediction can help explore scientific data, but users need to inspect errors—not only predictions.
-2. **Dataset (20 s):** Load the UCI superconductivity dataset and show row count, feature count, and target units.
-3. **Model comparison (45–60 s):** Select Median Baseline, Ridge Regression, and Extra Trees with the same test fraction and random seed. Read only the real metrics shown in the app.
-4. **Plot (30 s):** Explain that points closer to the diagonal are more accurate; outliers are prediction errors.
-5. **Caveats (20 s):** Scores depend on the split, feature associations do not prove causation, and predictions require experimental validation.
-6. **Future direction (15 s):** Mention subgroup evaluation and calibrated uncertainty as future work.
+1. **Problem (20 s):** “We explore whether the composition of an iron-based metallic-glass alloy can help predict the temperature at which crystallization begins.”
+2. **Dataset (20 s):** Load the open RWTH dataset. Show the valid measurement count and composition-feature count.
+3. **Model evaluation (45 s):** Use the same test fraction and random seed to evaluate the Median Baseline, Ridge Regression, and Extra Trees. Read only the actual scores shown by the app.
+4. **Prediction plot (25 s):** Explain that points near the diagonal have more accurate predictions; points farther away are larger errors.
+5. **User-input demo (30 s):** Enter a composition in the simple element-plus-amount format, such as Fe72B20Si8, only if those elements are present in the loaded data. Explain that the result is an exploratory estimate.
+6. **Limitations (20 s):** The model uses composition only, cannot replace experiments, and may generalize poorly to new alloy families.
 
-Record after a fresh launch. Keep total video at or below four minutes if included.
+Record only after confirming the live dataset and all UI controls work. Keep the submitted video at or below four minutes.
