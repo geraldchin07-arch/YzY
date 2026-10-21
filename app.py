@@ -63,23 +63,38 @@ def _(X, mo, y):
 @app.cell
 def _(X, evaluate_model, mo, model_choice, seed, test_fraction, y):
     if X is not None and model_choice is not None:
-        try:
-            evaluation = evaluate_model(X, y, model_choice.value, random_state=int(seed.value), test_size=float(test_fraction.value))
-            metrics = mo.md(f"""## Held-out evaluation
-
-| Metric | Value |
-|---|---:|
-| MAE | {evaluation.mae:.2f} K |
-| RMSE | {evaluation.rmse:.2f} K |
-| R² | {evaluation.r2:.3f} |
-
-Use the same test fraction and random seed when comparing models. These metrics describe only this split of the published dataset.
-""")
-        except Exception as exc:
-            evaluation = None
-            metrics = mo.md(f"**Evaluation failed:** {type(exc).__name__}: {exc}")
+        model_names = [
+            "Median Baseline",
+            "Ridge Regression",
+            "Extra Trees",
+            "Transformer Neural Network",
+        ]
+        evaluations = {}
+        table_lines = [
+            "| Model | MAE (K) | RMSE (K) | R² |",
+            "|---|---:|---:|---:|",
+        ]
+        for name in model_names:
+            try:
+                result = evaluate_model(
+                    X, y, name,
+                    random_state=int(seed.value),
+                    test_size=float(test_fraction.value),
+                )
+                evaluations[name] = result
+                table_lines.append(f"| {name} | {result.mae:.2f} | {result.rmse:.2f} | {result.r2:.3f} |")
+            except Exception as exc:
+                table_lines.append(f"| {name} | — | — | Failed: {type(exc).__name__} |")
+        evaluation = evaluations.get(model_choice.value)
+        metrics = mo.md(
+            "## Fair held-out model comparison\n\n"
+            + "\n".join(table_lines)
+            + "\n\nAll models use the same test fraction and random seed. "
+              "Scores describe this split only; the Transformer may not outperform simpler models."
+        )
     else:
-        evaluation, metrics = None, mo.md("Load the dataset to evaluate a model.")
+        evaluation = None
+        metrics = mo.md("Load the dataset to compare models.")
     metrics
     return (evaluation,)
 
