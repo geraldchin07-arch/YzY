@@ -1,92 +1,94 @@
-# MatSci Lens
+# CrystalCast
 
 **OSI Hackathon 2026 — Molecular and Material Property Prediction**
 
-MatSci Lens is an interactive research demo for exploring superconducting materials data and evaluating machine-learning models that predict critical temperature. The aim is to make model performance, prediction errors, and scientific limitations visible—not to claim that predictions prove new materials will work experimentally.
+CrystalCast is an interactive research demo focused on one specific materials-science question:
+
+> Can alloy composition help predict the crystallization-onset temperature (Tx) of iron-based metallic-glass alloys?
+
+Metallic glasses lack the long-range ordered structure of crystals. When heated, they may begin to crystallize. Estimating the onset temperature could help researchers compare candidate alloys before conducting experiments. CrystalCast evaluates models against held-out published measurements and lets a user enter a composition for an exploratory estimate.
+
+## What it does
+
+- Loads the open RWTH Aachen dataset for 701 iron-based metallic-glass alloys.
+- Uses alloy composition as the model input; it deliberately excludes measured crystallization, glass-transition, and liquidus temperatures from the features to avoid target leakage.
+- Compares a median baseline, Ridge Regression, and Extra Trees.
+- Reports MAE, RMSE, and R² on a reproducible held-out test split.
+- Plots measured versus predicted crystallization-onset temperature and summarizes prediction errors.
+- Accepts a compact composition such as Fe72B20Si8 for an exploratory prediction, if its elements are represented in the data.
+
+## Dataset and attribution
+
+Bobzin et al., “Data driven development of iron-based metallic glasses using artificial neural networks,” associated dataset hosted by RWTH Aachen University (2023).
+
+- Dataset record: https://publications.rwth-aachen.de/record/969330
+- Direct Excel file: https://publications.rwth-aachen.de/record/969330/files/Fe_MG_Database.xlsx
+- DOI: https://doi.org/10.18154/RWTH-2023-09114
+
+The source record describes 701 iron-based metallic-glass alloys and includes composition and, where available, crystallization temperature, glass-transition temperature, liquidus temperature, heating rate, and manufacturing information. CrystalCast uses composition to predict Tx. Please consult the source record for attribution and reuse terms.
 
 ## Project status
 
-This repository is a starter implementation. The app and dependencies must be run locally and the real-data workflow must be checked before reporting scientific results. Do not put unverified scores in the write-up.
-
-## Planned features
-
-- Load the public UCI Superconductivity dataset.
-- Compare a median baseline, Ridge Regression, and Extra Trees.
-- Report MAE, RMSE, and R² on held-out test data.
-- Visualise predicted versus measured critical temperatures and error patterns.
-- Discuss model limitations and distinguish correlations from causal explanations.
-
-## Dataset
-
-UCI Machine Learning Repository, **Superconductivity Data**:
-https://archive.ics.uci.edu/dataset/464/superconductivty%2Bdat
-
-Dataset attribution and terms should be checked at the source before redistribution. The project should download data on demand or use a local cache; do not commit a large raw dataset to Git.
+This is a hackathon prototype. Offline unit tests validate the data-preparation and modelling logic on synthetic test data only. The actual RWTH workbook and the full Marimo UI must be run locally before reporting scientific metrics. Do not present synthetic test outcomes as scientific results.
 
 ## Requirements
 
 - Python 3.11 or newer recommended
-- Internet access for initial dependency installation and dataset retrieval
+- Internet access for initial dataset download and dependency installation
+- Alternatively, download the Excel file from the source record and place it at data/Fe_MG_Database.xlsx
 
-## Setup (Windows PowerShell)
+## Setup on Windows
 
-```powershell
-git clone https://github.com/geraldchin07-arch/YzY.git
-cd YzY
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
+Open this repository in VS Code. In Terminal → New Terminal, run:
 
-If working on the feature branch, switch to it after cloning:
+    python -m venv .venv
+    .venv\Scripts\Activate.ps1
+    python -m pip install --upgrade pip
+    python -m pip install -r requirements.txt
 
-```powershell
-git checkout feature/matsci-lens-starter
-```
+If PowerShell blocks activation, use a terminal that supports environment activation rather than changing system-wide security settings.
 
-## Run
+## Tests and run
 
-Once the application files are added and dependencies installed:
+Run the offline tests first:
 
-```powershell
-python -m unittest discover -s tests -v
-python -m marimo edit app.py
-```
+    python -m unittest discover -s tests -v
 
-The test command should be run first. A successful synthetic unit test run validates software behaviour on test fixtures only; it does **not** prove model performance on the scientific dataset.
+Then launch the interactive notebook:
 
-## Two-person work plan
+    python -m marimo edit app.py
 
-- **Data and modelling:** data loading/cleaning, model pipeline, reproducible split, metrics, and error analysis.
-- **Interface and communication:** Marimo user interface, visualisations, README/testing, screenshots, one-page write-up, and demo video.
+The first dataset load needs internet access unless the workbook has been downloaded into the local data folder. The data folder is excluded from Git so the source workbook is not accidentally committed.
 
-Both teammates should review the integrated app and check the reported results before submission. Use branches and pull requests rather than editing the same files concurrently.
+## Model evaluation
 
-## Validation checklist
+Use the same test fraction and random seed when comparing models. The app reports:
 
-- [ ] Install dependencies in a clean environment.
-- [ ] Run unit tests and record the output.
-- [ ] Launch the Marimo app.
-- [ ] Verify dataset row/column counts and target column.
-- [ ] Run every model option successfully.
-- [ ] Save real MAE, RMSE, and R² values from the held-out test set.
-- [ ] Check charts and explain limitations.
-- [ ] Add screenshots and a demo only after the app works.
-- [ ] Replace all placeholders in the write-up with verified information.
+- MAE: average absolute prediction error, in kelvin.
+- RMSE: error metric that penalizes larger errors more strongly, in kelvin.
+- R²: proportion of test-target variation explained relative to a mean baseline.
+
+Use the actual metrics displayed after loading the source dataset. A random split can overestimate performance on entirely new alloy families, especially where related compositions appear in both train and test sets. Composition-only models also omit processing history and measurement conditions.
+
+## Two-person collaboration plan
+
+- **Data and modelling:** verify the data columns and target, run tests, compare models, record true-data metrics, and write the limitations.
+- **Interface and communication:** test the Marimo app and composition-input flow, review charts, prepare the short demo, and finish the submission text.
+- Both teammates should inspect the results before submission. Commit changes in small increments and coordinate before editing the same file.
 
 ## Scientific cautions
 
-- A held-out test score estimates performance for the chosen split; it is not proof of generalisation to all new materials.
-- Feature importance and association do not establish causation.
-- Model predictions should not be described as experimental confirmation.
-- Report the split procedure, random seed, metrics, and any known limitations.
+- A predicted Tx is an estimate, not an experimental measurement.
+- Feature relationships do not prove causation.
+- The model is trained on iron-based metallic glasses and should not be assumed to apply to every alloy or material family.
+- The estimate is not a calibrated uncertainty interval.
+- Record the test fraction, random seed, sample count, and real model metrics in the write-up.
 
 ## Team
 
 - Repository owner: @geraldchin07-arch
-- Teammate: add GitHub username in the repository's collaborator settings.
+- Teammate: add their GitHub username through repository collaborator settings.
 
 ## License
 
-Choose a project license before public reuse. Dataset licensing/terms and project code licensing are separate matters.
+Choose a license for this project's code before encouraging reuse. The source dataset and project code may have different terms.
