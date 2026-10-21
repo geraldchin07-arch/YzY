@@ -12,7 +12,9 @@ Metallic glasses lack the long-range ordered structure of crystals. When heated,
 
 - Loads the open RWTH Aachen dataset for 701 iron-based metallic-glass alloys.
 - Uses alloy composition as the model input; it deliberately excludes measured crystallization, glass-transition, and liquidus temperatures from the features to avoid target leakage.
-- Compares a median baseline, Ridge Regression, and Extra Trees.
+- Compares a median baseline, Ridge Regression, Extra Trees, and a small PyTorch TransformerEncoder model.
+- Treats each element as a token, with its concentration as the numeric value and a learned embedding identifying the element. Self-attention can model interactions between composition features.
+- Uses early stopping on a validation slice of the training data for the experimental Transformer.
 - Reports MAE, RMSE, and R² on a reproducible held-out test split.
 - Plots measured versus predicted crystallization-onset temperature and summarizes prediction errors.
 - Accepts a compact composition such as Fe72B20Si8 for an exploratory prediction, if its elements are represented in the data.
@@ -34,6 +36,7 @@ This is a hackathon prototype. Offline unit tests validate the data-preparation 
 ## Requirements
 
 - Python 3.11 or newer recommended
+- PyTorch for the optional Transformer model (the first install may take longer)
 - Internet access for initial dataset download and dependency installation
 - Alternatively, download the Excel file from the source record and place it at data/Fe_MG_Database.xlsx
 
