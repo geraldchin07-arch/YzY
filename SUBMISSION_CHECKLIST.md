@@ -6,7 +6,8 @@
 - [ ] Run python -m unittest discover -s tests -v successfully.
 - [ ] Launch the Marimo app.
 - [ ] Load the actual RWTH Excel dataset and verify target/feature columns.
-- [ ] Evaluate all three models using the same test fraction and seed.
+- [ ] Evaluate the baseline, Ridge Regression, Extra Trees, and Transformer using the same test fraction and seed.
+- [ ] Record whether the Transformer improves on simpler models; do not assume it does.
 - [ ] Record actual MAE, RMSE, R², sample count, test fraction, and seed.
 - [ ] Test the user-entered composition prediction and report any unsupported elements clearly.
 - [ ] Fill the write-up Results section using actual dataset results.
