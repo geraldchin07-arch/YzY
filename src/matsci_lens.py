@@ -82,6 +82,11 @@ def parse_composition(formula: Any) -> dict[str, float]:
 def _element_symbol(column: Any) -> str | None:
     """Return an element symbol when a column appears to contain its at.% value."""
     label = str(column).strip()
+    # Temperature shorthand can collide with real element symbols: Tl is thallium,
+    # Tm is thulium, but Tl/Tm can also mean liquidus/melting temperature in datasets.
+    normalized = re.sub(r"[^a-z0-9]", "", label.lower())
+    if re.fullmatch(r"t(?:x|g|l|m)(?:k|c|degc|celsius)?", normalized):
+        return None
     match = re.match(r"^([A-Z][a-z]?)(?:$|[\s_(\[/,%])", label)
     if match:
         symbol = match.group(1)
