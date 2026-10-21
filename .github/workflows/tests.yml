@@ -20,6 +20,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+          # Install the CPU-only PyTorch wheel to keep CI smaller and faster.
+          grep -v '^torch' requirements.txt > /tmp/requirements-base.txt
+          python -m pip install -r /tmp/requirements-base.txt
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple "torch>=2.2,<3.0"
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
