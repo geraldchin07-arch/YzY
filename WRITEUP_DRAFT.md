@@ -9,6 +9,8 @@ We use the open RWTH Aachen dataset of iron-based metallic-glass alloys. Composi
 ## Results
 **Complete this section only after running the app on the real dataset.** Record the number of rows with valid Tx, the number of composition features, the test fraction, random seed, and each model's actual MAE, RMSE, and R², including the Transformer. State which model performed best on the selected split and discuss visible error patterns. Do not use synthetic unit-test numbers as scientific results.
 
+A related published study using this database reports an ANN RMSE of 12.8 K for Tx. This is contextual literature evidence only; our test split and preprocessing may differ, so we will not claim a direct comparison without reproducing the published protocol.
+
 ## Conclusions
 The prototype makes the relationship between alloy composition and predicted Tx easier to explore. The results apply to the dataset and split evaluated; they do not prove causal relationships or replace thermal experiments. Composition-only predictions may miss effects from heating rate, processing history, and differences between alloy families.
 
