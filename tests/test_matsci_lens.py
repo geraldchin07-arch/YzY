@@ -50,6 +50,27 @@ class CrystalCastTests(unittest.TestCase):
         self.assertEqual(set(x.columns), {"Fe", "B", "Si"})
         self.assertEqual(len(y), 12)
 
+
+    def test_prepare_dataset_converts_explicit_celsius_target_to_kelvin(self):
+        raw = pd.DataFrame({
+            "Fe": [70] * 12,
+            "B": [20] * 12,
+            "Si": [10] * 12,
+            "Tx (°C)": [400.0] * 12,
+        })
+        x, y = prepare_dataset(raw)
+        self.assertAlmostEqual(float(y.iloc[0]), 673.15, places=3)
+        self.assertEqual(set(x.columns), {"Fe", "B", "Si"})
+
+    def test_finds_german_crystallization_temperature_header(self):
+        raw = pd.DataFrame({
+            "Fe": [70] * 12,
+            "B": [20] * 12,
+            "Kristallisationstemperatur (K)": [750.0] * 12,
+        })
+        x, y = prepare_dataset(raw)
+        self.assertAlmostEqual(float(y.iloc[0]), 750.0)
+
     def test_clean_drops_bad_target_and_empty_columns(self):
         x = pd.DataFrame({"a": range(11), "empty": [np.nan] * 11})
         y = pd.Series([1,2,3,4,5,6,7,8,9,10,np.nan])
