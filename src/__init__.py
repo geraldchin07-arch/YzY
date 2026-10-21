@@ -1,1 +1,1 @@
-"""MatSci Lens package."""
+"""CrystalCast package."""
